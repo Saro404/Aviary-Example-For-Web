@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>
+    Aviary Javascript SDK 
+      </title>
+      <!-- no need for jquery, you can replace it with java script -->
+      <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+      <!-- fisrt step, call the feather.js from aviary.com -->
+      <script type="text/javascript" src="http://feather.aviary.com/js/feather.js"></script>
+      <script type="text/javascript" >  
+function readImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();    
+            reader.onload = function (e) {
+                $('#PrvImage').attr('src', e.target.result);
+                                        }
+
+            reader.readAsDataURL(input.files[0]);                           
+                                        }
+
+                                }
+
+
+    $(document).on('change', '#Image', function() {
+       readImage(this);
+    });
+                              
+         /* edit Images using aviray */
+            var featherEditor = new Aviary.Feather({
+                apiKey: '', // your api key , you can get one from http://developers.aviary.com/
+                apiVersion: 3, // the api version . 3 is the last one so far
+                theme: 'dark', // Check out our new 'light' and 'dark' themes!
+                tools: 'all', // you can specify the tools from here, you can include/exclude what ever you want
+                appendTo: '',
+                onSave: function(imageID, newURL) {
+                    var img = document.getElementById(imageID);
+                    img.src = newURL; // after save, replacs the image with the new one from aviary.com
+                },
+                onError: function(errorObj) { 
+                    alert(errorObj.message);
+                }
+            });
+            function launchEditor(id, src) {
+                featherEditor.launch({
+                    image: id,
+                    url: src
+                });
+               return false;
+            }
+         
+               /* replace the privew image with the new uploaded image, then send it to aviary javascript code */
+             $(document).on('click', '#editPrvImage', function() {
+                       var url =$('#PrvImage').attr("src");
+                       return launchEditor('PrvImage', url);  
+             });
+         
+                   
+                
+      </script>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style>
+         .black-add-button{
+         cursor: pointer;
+         float:left;
+         background-color:transparent;
+         -moz-border-radius: 2px;
+         -webkit-border-radius: 2px;
+         border-radius: 2px;
+         border: 1px solid #d5d5d5;
+         display: inline-block;
+         color: #333333;
+         font-family: Tahoma;
+         font-size: 12px;
+         font-weight: normal;
+         padding: 5px 12px;
+         text-decoration:none;
+         background-color:#ffffff;
+         }
+         .imageupload{
+         margin-top:14px;
+         margin-bottom:14px;
+         margin-left:auto;
+         margin-right:auto;
+         text-align:center;
+         }
+         img{
+         width: 650px;
+         height:450px;
+         }
+      </style>
+   </head>
+   <body>
+      <fieldset>
+         <form action="#" method="post"  enctype="multipart/form-data">
+            <!-- Form components -->
+            <div class="widget">
+               <div class="well">
+                  <div class="controls controls-width span12"  >
+                     <label class="control-label">  
+                     <b>
+                     Upload your image:
+                     </b>
+                     </label>
+                     <br/>
+                     <br/>
+                     <input type="file" id="Image">
+                     <div class="imageupload">
+                        <div id="photo">
+                           <img id="PrvImage" src="preview.jpg" alt="your image"/>
+                        </div>
+                        <br/>
+                        <br/>
+                        <button  type="button"  class="black-add-button" id="editPrvImage"> Edit!
+                        </button> 
+                     </div>
+                  </div>
+               </div>
+            </div>
+            </div>
+            <!-- /widget -->
+            </div>       
+         </form>
+         <!-- /form -->
+      </fieldset>
+   </body>
+</html>
